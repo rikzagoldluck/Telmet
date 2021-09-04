@@ -1,7 +1,18 @@
 #include <SPI.h>
 #include <RF24.h>
 #include <RF24Network.h>
-#include <Telmet.h>
+
+struct parcel {
+  uint16_t s1;
+  uint16_t s2;
+  uint16_t s3;
+  uint16_t s4;
+  double s5;
+  double s6;
+  uint8_t s7;
+  int s8;
+  int s9;
+};
 
 RF24 radio(7, 8);               // nRF24L01(+) radio attached using Getting Started board
 
@@ -26,33 +37,31 @@ void loop(void) {
 
   network.update();                  // Check the network regularly
 
-    while (network.available()) {      // Is there anything ready for us?
+  while (network.available()) {      // Is there anything ready for us?
 
     RF24NetworkHeader header;        // If so, grab it and print it out
-    tampung sensors;
-    uint16_t res = network.read(header, &sensors, sizeof(sensors));
+    parcel getParcel;
+    uint16_t res = network.read(header, &getParcel, sizeof(getParcel));
     if (res <= 0) {
       Serial.print("Failed");
     }
     Serial.print("A");
-    Serial.println(sensors.s1);
+    Serial.println(getParcel.s1);
     Serial.print("B");
-    Serial.println(sensors.s2);
+    Serial.println(getParcel.s2);
     Serial.print("C");
-    Serial.println(sensors.s3);
+    Serial.println(getParcel.s3);
     Serial.print("D");
-    Serial.println(sensors.s4);
+    Serial.println(getParcel.s4);
     Serial.print("E");
-    Serial.println(sensors.s5);
+    Serial.println(getParcel.s5, 6);
     Serial.print("F");
-    Serial.println(sensors.s6);
+    Serial.println(getParcel.s6, 6);
     Serial.print("G");
-    Serial.println(sensors.s7);
+    Serial.println(getParcel.s7);
     Serial.print("H");
-    Serial.println(sensors.s8);
+    Serial.println(getParcel.s8);
     Serial.print("I");
-    Serial.println(sensors.s9);
-    Serial.print("J");
-    Serial.println(sensors.s10);
+    Serial.println(getParcel.s9);
   }
 }
